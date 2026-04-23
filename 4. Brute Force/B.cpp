@@ -3,54 +3,65 @@
 
 using namespace std;
 
+void cetak(ll tombol[], ll K){
+    for(ll i = 0; i<K; i++){
+        cout << tombol[i]<< " ";
+    }
+    cout << endl;
+}
+
 int main(){
-    ll N, K;
+    ll N,K;
     cin >> N >> K;
-    ll kunci[K+2];
-    ll min[K+1];
-    ll total = 0;
-    for(ll i=1; i<=K; i++){
-        kunci[i] = i;
-        min[i] = i;
-        total += kunci[i];
-    }
-    kunci[K+1] = N+1;
 
-    
-    ll total_max = 0;
-    for(ll i=N; i>N-K; i--){
-        total_max+=i;
-    }
+    ll tombol[K];
+    for(ll i=0; i<K; i++){
+        tombol[i] = i + 1;
+    }// 1 2
 
-
-    ll indeks = K;
-    
-    
-    while(total < total_max){
-        cout<<indeks<< " bhap "<< min[indeks] << " " << kunci[indeks+1]<< endl;
-        for(ll i=min[indeks]; i<kunci[indeks+1]; i++){
-            kunci[indeks] = i;
-            for(ll j=1; j<=K; j++){
-                cout << kunci[j] <<" ";
+    bool kelar = false;
+    bool lanjut = true;
+    ll kedalaman = K - 1; 
+    while(!kelar){
+        kelar = true;
+        ll nilaiakhir = N;
+        for(int i=K-1; i>=0; i--){
+            if(tombol[i] != nilaiakhir){
+                kelar = false;
             }
-            cout << endl;
+            nilaiakhir--;
         }
-        min[indeks]++;
-        if(indeks == K){
-            indeks--;
-        }else{
-            if(kunci[indeks])
+        
+        while(lanjut){
+            cetak(tombol, K);
+            tombol[kedalaman]++;
+            if((kedalaman == K-1) && (tombol[kedalaman] > N)){
+                lanjut = false;
+            }
         }
-        min[indeks]++;
-        for(ll i=1; i<=K; i++){
-            kunci[i] = min[i];
+        if(N == K){
+            break;
         }
-        total = 0;
-        for(ll i=1; i<=K; i++){
-            total += kunci[i];
+        tombol[kedalaman]--;
+        ll bisageser;
+        if(K == 1){
+            break;
         }
+        for(ll i=K-2; i>=0; i--){
+            if(tombol[i] != tombol[i+1] - 1){
+                bisageser = i;
+                break;
+            }
+        }
+        //cout << "debug: " << bisageser << endl;
+        //cout <<"debug: " << tombol[0]<< " " << tombol[1]<< " "<< tombol[2] << endl;
+        tombol[bisageser]++;
+        for(ll i=bisageser + 1; i<K; i++){
+            tombol[i] = tombol[i-1] + 1;
+        }
+        lanjut = true;
+        
     }
-
-
-
+    //cout << "debug: " << tombol[0]<< " " << tombol[1]<< " "<< tombol[2] << endl;
+    
 }

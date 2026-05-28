@@ -5,7 +5,7 @@ using namespace std;
 int main(){
     int M, N;
     cin >> M >> N;
-    int warna[M][N];
+    char warna[M][N];
     for(int i=0; i<M; i++){
         for(int j=0; j<N; j++){
             cin >> warna[i][j];
@@ -118,15 +118,53 @@ int main(){
     }
 
     int totalMax = 0;
+    int maxBaris;
+    int maxKolom;
 
     for(int i=0; i<M; i++){
         for(int j=0; j<N; j++){
             if(total[i][j] > totalMax){
                 totalMax = total[i][j];
+                maxBaris = i;
+                maxKolom = j;
             }
         }
     }
-    cout << totalMax * (totalMax - 1);
+
+    for(int i=0; i<totalMax; i++){
+        warna[baris[maxBaris][maxKolom][i]][kolom[maxBaris][maxKolom][i]] = '.';
+    }
+    for(int i=0; i<M; i++){
+        for(int j=0; j<N; j++){
+            if(warna[i][j] == '.'){
+                bool turun = false;
+                for(int k=i; k > 0; k--){
+                    if(warna[k-1][j] != '.'){
+                        warna[k][j] = warna[k-1][j];
+                    }
+                    turun = true;
+                }
+                if(turun){
+                    for(int k=0; k<i; k++){
+                        if(warna[k][j] != '.'){
+                            warna[k][j] = '.';
+                            break;
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+
+    for(int i=0; i<M; i++){
+        for(int j=0; j<N; j++){
+            cout << warna[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    
 
 
 
